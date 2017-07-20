@@ -1,0 +1,122 @@
+﻿创建版本库
+$ mkdir learngit
+$ cd learngit
+$ pwd
+/Users/michael/learngit
+
+$ git init
+Initialized empty Git repository in /Users/michael/learngit/.git/
+
+$ git add readme.txt
+
+$ git commit -m "wrote a readme file"
+[master (root-commit) cb926e7] wrote a readme file
+ 1 file changed, 2 insertions(+)
+ create mode 100644 readme.txt
+
+$ git add file1.txt
+$ git add file2.txt file3.txt
+$ git commit -m "add 3 files."
+
+$ git status
+# On branch master
+# Changes not staged for commit:
+#   (use "git add <file>..." to update what will be committed)
+#   (use "git checkout -- <file>..." to discard changes in working directory)
+#
+#    modified:   readme.txt
+#
+no changes added to commit (use "git add" and/or "git commit -a")
+
+$ git diff readme.txt 
+diff --git a/readme.txt b/readme.txt
+index 46d49bf..9247db6 100644
+--- a/readme.txt
++++ b/readme.txt
+@@ -1,2 +1,2 @@
+-Git is a version control system.
++Git is a distributed version control system.
+ Git is free software.
+
+#版本回退
+$ git reset --hard HEAD^
+HEAD is now at ea34578 add distributed
+
+$ git reset --hard 3628164
+HEAD is now at 3628164 append GPL
+
+$ git diff HEAD -- readme.txt 
+diff --git a/readme.txt b/readme.txt
+index 76d770f..a9c5755 100644
+--- a/readme.txt
++++ b/readme.txt
+@@ -1,4 +1,4 @@
+ Git is a distributed version control system.
+ Git is free software distributed under the GPL.
+ Git has a mutable index called stage.
+-Git tracks changes.
++Git tracks changes of files.
+
+#撤销修改
+git checkout -- readme.txt
+
+#删除文件
+$ git rm test.txt
+rm 'test.txt'
+$ git commit -m "remove test.txt"
+[master d17efd8] remove test.txt
+ 1 file changed, 1 deletion(-)
+ delete mode 100644 test.txt
+
+$ git remote add origin git@github.com:michaelliao/learngit.git
+$ git push -u origin master
+$ git clone git@github.com:michaelliao/gitskills.git
+Cloning into 'gitskills'...
+remote: Counting objects: 3, done.
+remote: Total 3 (delta 0), reused 0 (delta 0)
+Receiving objects: 100% (3/3), done.
+
+
+$ git checkout -b feature1
+Switched to a new branch 'feature1'
+
+$ git add readme.txt 
+$ git commit -m "AND simple"
+
+$ git checkout master
+Switched to branch 'master'
+Your branch is ahead of 'origin/master' by 1 commit.
+
+$ git add readme.txt 
+$ git commit -m "& simple"
+[master 400b400] & simple
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+$ git merge feature1
+Auto-merging readme.txt
+CONFLICT (content): Merge conflict in readme.txt
+Automatic merge failed; fix conflicts and then commit the result.
+
+$ git add readme.txt 
+$ git commit -m "conflict fixed"
+[master 59bc1cb] conflict fixed
+
+
+$ git log --graph --pretty=oneline --abbrev-commit
+*   59bc1cb conflict fixed
+|\
+| * 75a857c AND simple
+* | 400b400 & simple
+|/
+
+$ git branch -d feature1
+Deleted branch feature1 (was 75a857c).
+
+#自定义服务器
+$ useradd git git
+$ mkdir /home/git/.ssh/authorized_keys
+$ vim /home/git/.ssh/authorized_keys
+$ cd /srv
+$ git init --bare sample.git
+$ cat /etc/passswd #git:x:506:506:,,,:/home/git:/usr/bin/git-shell
+$ git clone ssh://git@115.xx.xxx.x5:22xxx/srv/sample.git
